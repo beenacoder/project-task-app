@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { ProjectController } from '../controllers/ProjectController';
 import { handleInputErrors } from '../middlewares/validation';
 //Con los métodos estáticos solo tenemos que importar el controlador
@@ -9,7 +9,6 @@ import { handleInputErrors } from '../middlewares/validation';
 
 const router = Router()
 
-router.get('/', ProjectController.getAllProjects);
 router.post('/',
     body('projectName')
         .notEmpty().withMessage("El nombre del proyecto es obligatorio, por favor ingresa un nombre."),
@@ -20,5 +19,10 @@ router.post('/',
     handleInputErrors, //middleware reutilizable, si pasa la validación que entre al controlador, sino lanza el middleware
     ProjectController.createProjects);
 
+router.get('/', ProjectController.getAllProjects);
+router.get('/:id', 
+    param('id').isMongoId().withMessage("El id del proyecto no es valido."),
+    handleInputErrors, 
+    ProjectController.getProjectById);
 
 export default router;

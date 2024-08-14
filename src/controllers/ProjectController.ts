@@ -33,4 +33,13 @@ export class ProjectController {
             console.log(error)
         }
     }
+
+    static getProjectById = async (req: Request, res: Response) => {
+        try {
+            const oneProject = await Project.findById(req.params.id);
+            res.json(oneProject);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
